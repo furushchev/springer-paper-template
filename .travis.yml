@@ -1,0 +1,28 @@
+language:
+- generic
+compiler:
+- gcc
+dist: trusty
+sudo: required
+before_script:
+- sudo apt-get update
+- sudo apt-get install -y -qq  texlive
+- sudo apt-get install -y -qq texlive-lang-cjk
+- sudo apt-get install -y -qq texlive-science
+- sudo apt-get install -y -qq xdvik-ja
+- sudo apt-get install -y -qq dvipsk-ja
+- sudo apt-get install -y -qq gv
+- sudo apt-get install -y -qq texlive-fonts-recommended
+- sudo apt-get install -y -qq texlive-fonts-extra
+- sudo apt-get install -y -qq wget
+- sudo apt-get install -y -qq omake
+- sudo apt-get install -y -qq build-essential
+script:
+- make
+deploy:
+  provider: releases
+  api_key:
+    secure: M2C6JIUcbBskx9nQ3bXS5oqsyukNiPoLDgU9c2AbQqA3lV+I53PSy/rm/oWhMkmNr/grUO5EVjbCGfr8YdssFqxf/GwAfY/uWwdobYYGubj1wYoHOwL80pzFk2TPRvOKtkRwz5yFYB5LZqqr9bQTAFVjGz6SS9qLlswS3VlVp+3t2vryPMd4t5y9R+lLyMseLebq7FDYp5z3KtRAIHAD1TTdxLnxOoE/zF55wwx55WCtJHa4eLvh4MGnVncipaxtqt4jOv7AjqLzY6TPokFRfX6Wmv0r+lPjS4QEfp+HA3hKJsXvzUdNYO6um7Dd0+xr3hNeRgEwV68ulJJ1kgFLDsXzxTato4WnszCmiZvNBd2L6KVIJ4Fi4sZVXvXIfa91oYP/fy404T6g7ez2NBdVz1tEW+NV7p89p2CI8U9vH5Epdd+apOuTPk1ViDfFftDuBuYkD4q19PX5NWkNKB5d8cAsafZiYPnB3DxomqTYC6ToiIoaQ20oQ5l/JY1TnTJWUL6y+Qgg64XT1L2POxj7ln+4/qqqUwktAiyvMWCZLnfESOozrgD/oebVqjWO/rUWGUQoHejzEkwXaCJyMsErMUIk8UOtTA30dc6XUZIcoWYMDcLeFOFxW83/f6SE85rmziAP093Kp/FBCv9Evhz9jusACHbwcREEv5ZqP+Pl7nU=
+  file: main.pdf
+  on:
+    tags: true
