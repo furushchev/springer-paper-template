@@ -1,0 +1,28 @@
+language:
+- generic
+compiler:
+- gcc
+dist: trusty
+sudo: required
+before_script:
+- sudo apt-get update
+- sudo apt-get install -y -qq  texlive
+- sudo apt-get install -y -qq texlive-lang-cjk
+- sudo apt-get install -y -qq texlive-science
+- sudo apt-get install -y -qq xdvik-ja
+- sudo apt-get install -y -qq dvipsk-ja
+- sudo apt-get install -y -qq gv
+- sudo apt-get install -y -qq texlive-fonts-recommended
+- sudo apt-get install -y -qq texlive-fonts-extra
+- sudo apt-get install -y -qq wget
+- sudo apt-get install -y -qq omake
+- sudo apt-get install -y -qq build-essential
+script:
+- make
+deploy:
+  provider: releases
+  user: "$GITHUB_USERNAME"
+  password: "$GITHUB_PASSWORD"
+  file: main.pdf
+  on:
+    tags: true
