@@ -1,7 +1,7 @@
 #######################################################################
-# Build Rule for Paper with Springer Engineering Style
+# Build Rule for Generating Thesis of Creative Informatics
 # Author: Yuki Furuta <furushchev@jsk.imi.i.u-tokyo.ac.jp>
-# Date: 2016/1/5
+# Date: 2015/11/12
 #######################################################################
 
 # programs
@@ -21,12 +21,14 @@ GLOB_OPTIONS=i
 
 # files
 TARGET=main
-FIGDIR=figs
-PUBDIR=pubs
+BASEDIR=.
+SRCDIR=$(BASEDIR)/src
+FIGDIR=$(BASEDIR)/figs
 
 # dependencies
-TEX_FILES=$(glob *.tex */*.tex)
-BIB_FILES=$(glob *.bib)
+TEX_FILES=$(glob $(BASEDIR)/*.tex $(SRCDIR)/*.tex)
+TEX_BAK_FILES=$(addsuffix .orig, $(TEX_FILES))
+BIB_FILES=$(glob $(BASEDIR)/*.bib)
 RAWIMG_FILES=$(glob $(FIGDIR)/*.jpg $(FIGDIR)/*.png $(FIGDIR)/*.pdf)
 IMG_FILES=$(glob $(FIGDIR)/*.eps) $(RAWIMG_FILES)
 BB_FILES=$(addsuffix .bb, $(removesuffix $(RAWIMG_FILES)))
@@ -47,15 +49,12 @@ XBB_FILES=$(addsuffix .xbb, $(removesuffix $(RAWIMG_FILES)))
 	%.xbb: %.pdf
 		$(EXTRACTBB) $(XBBFLAGS) $<
 
-.PHONY: clean preview publish
+.PHONY: clean preview publish all
 
 TEXDEPS[]=$(TEX_FILES) $(BIB_FILES) $(IMG_FILES) $(XBB_FILES) $(BB_FILES)
 LaTeXDocument($(TARGET), $(TARGET))
-.DEFAULT: $(TARGET).pdf $(TARGET).dvi
-
-publish: $(TARGET).pdf
-	mkdir -p $(PUBDIR)
-	cp $(TARGET).pdf $(PUBDIR)/$(TARGET)_$(shell date +%Y%m%d%H%M%S).pdf
+.DEFAULT: all
+all: $(TARGET).pdf $(TARGET).dvi
 
 openpdf(f)=
 	if $(equal $(OS), Linux)
@@ -67,6 +66,14 @@ preview: $(TARGET).pdf
 	openpdf($(TARGET).pdf)
 clean:
 	-rm -f $(glob *.toc *.log *.pdf *.dvi *.fls *.aux *.maf *.mtc *.bbl *.blg) $(XBB_FILES) $(BB_FILES)
+
+%.tex.orig: %.tex
+	sed -i.orig -e's/、/，/g' -e's/。/．/g' $<
+.SUBDIRS: $(SRCDIR)
+	%.tex.orig: %.tex
+		sed -i.orig -e's/、/，/g' -e's/。/．/g' $<
+
+publish: $(TEX_BAK_FILES) $(TARGET).pdf
 
 # notify after build
 notify(msg)=
