@@ -1,8 +1,12 @@
-# springer-paper-template
+# springer-report-template
 
-[![Build Status](https://travis-ci.org/furushchev/springer-paper-template.svg)](https://travis-ci.org/furushchev/springer-paper-template)
+Latex template for Springer Engineering
 
-### Prerequisities
+based on http://www.springer.com/engineering?SGWID=0-175-6-1381428-0
+
+[![Build Status](https://travis-ci.org/furushchev/springer-report-template.svg)](https://travis-ci.org/furushchev/springer-report-template)
+
+### 1. Prerequisities
 
 ```bash
 # only for ubuntu 12.04
@@ -10,16 +14,15 @@ $ sudo apt-add-repository ppa:texlive-backports/ppa
 $ sudo apt-get update
 ```
 
-### How to use
+### 2. Edit LaTeX files
 
-1. edit latex files
-2. compile
+### 3. Make pdf
 
-  ```bash
-  make
+```bash
+$ make
 ```
 
-### Enable auto pdf generation
+### 4. Release pdf
 
 - Install [Travis Command Line Tool](https://github.com/travis-ci/travis.rb#installation)
 - Enable Travis
@@ -29,9 +32,24 @@ $ sudo apt-get update
   travis setup releases --force
 ```
 
-- Push your tag by `git push --tag`. Then you can watch pdf in github releases.
+- After `travis` command, configuration like below will be appended to `.travis.yml`.
 
-### Clean
+  ```yaml
+deploy:
+  provider: releases
+  api_key: "GITHUB OAUTH TOKEN"
+  file: main.pdf
+  skip_cleanup: true
+  on:
+    tags: true
+```
+
+**NOTE** Please make sure you have `skip_cleanup` and `on: tags` is `true`
+
+
+- Push your tag by `git push --tags`. Then you can watch pdf in github releases.
+
+### Optional. cleaning
 
 ```bash
 $ make clean
